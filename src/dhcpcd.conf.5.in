@@ -451,6 +451,16 @@ Wait for
 .Ar seconds
 before starting IPv4LL.
 The default is 5 seconds.
+.It Ic ipv4ll_addr Ar address
+When IPv4LL is enabled, random address is picked up by default. The option
+is used to specify IPv4LL address from
+.Ar address
+in range of the suffix
+by CIDR. If the suffix of CIDR is not given, default subnet mask is used.
+Examples:
+.Pp
+.D1 ipv4ll_addr 169.254.1.1
+.D1 ipv4ll_addr 169.254.1.1/24
 .It Ic ipv6ra_autoconf
 Generate SLAAC addresses for each Prefix advertised by an IPv6
 Router Advertisement message with the Auto flag set.

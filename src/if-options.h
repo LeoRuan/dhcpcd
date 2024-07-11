@@ -191,6 +191,7 @@
 #define O_REQUEST_TIME		O_BASE + 54
 #define O_FALLBACK_TIME		O_BASE + 55
 #define O_IPV4LL_TIME		O_BASE + 56
+#define O_IPV4LL_ADDR		O_BASE + 57
 
 extern const struct option cf_options[];
 
@@ -251,6 +252,8 @@ struct if_options {
 	struct in_addr req_addr;
 	struct in_addr req_mask;
 	struct in_addr req_brd;
+	struct in_addr ipv4ll_addr;
+	struct in_addr ipv4ll_mask;
 	rb_tree_t routes;
 	struct in6_addr req_addr6;
 	uint8_t req_prefix_len;

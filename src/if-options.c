@@ -172,6 +172,7 @@ const struct option cf_options[] = {
 	{"request_time",    required_argument, NULL, O_REQUEST_TIME},
 	{"fallback_time",   required_argument, NULL, O_FALLBACK_TIME},
 	{"ipv4ll_time",     required_argument, NULL, O_IPV4LL_TIME},
+	{"ipv4ll_addr",     required_argument, NULL, O_IPV4LL_ADDR},
 	{NULL,              0,                 NULL, '\0'}
 };
 
@@ -2371,6 +2372,11 @@ invalid_token:
 			logerrx("invalid ipv4ll time: %s", arg);
 			return -1;
 		}
+		break;
+	case O_IPV4LL_ADDR:
+		ARG_REQUIRED;
+		if (parse_addr(&ifo->ipv4ll_addr, &ifo->ipv4ll_mask, arg) != 0)
+			return -1;
 		break;
 #endif
 	default:

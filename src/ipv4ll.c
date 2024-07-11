@@ -60,7 +60,7 @@ static const struct in_addr inaddr_llbcast = {
 };
 
 static void
-ipv4ll_pickaddr(struct interface *ifp)
+ipv4ll_pick_random_addr(struct interface *ifp)
 {
 	struct in_addr addr = { .s_addr = 0 };
 	struct ipv4ll_state *state;
@@ -89,6 +89,34 @@ again:
 	/* Restore the original random state */
 	setstate(ifp->ctx->randomstate);
 	state->pickedaddr = addr;
+}
+
+static void
+ipv4ll_pick_specified_addr(struct interface *ifp)
+{
+	uint32_t addr = 0;
+	uint32_t mask = 0;
+	struct ipv4ll_state *state;
+
+	state = IPV4LL_STATE(ifp);
+
+	addr = ntohl(state->pickedaddr.s_addr) + 1;
+	mask = ~ntohl(ifp->options->ipv4ll_mask.s_addr);
+
+	/* Roll back to initial address if the address is out of subnet */
+	if (addr == 1 || (addr & mask) == 0)
+		state->pickedaddr.s_addr = ifp->options->ipv4ll_addr.s_addr;
+	else
+		state->pickedaddr.s_addr = htonl(addr);
+}
+
+static void
+ipv4ll_pickaddr(struct interface *ifp)
+{
+	if (ifp->options->ipv4ll_addr.s_addr == INADDR_ANY)
+		ipv4ll_pick_random_addr(ifp);
+	else
+		ipv4ll_pick_specified_addr(ifp);
 }
 
 int
